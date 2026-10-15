@@ -1,6 +1,47 @@
 # Requirements Refiner
 
-A small Next.js application that turns a project idea into a structured specification through Luna review and human clarification.
+Turn a rough project idea into a specification you can build.
+
+Requirements Refiner helps developers clarify scope before writing code. It analyzes an idea, challenges the analysis in a separate AI review, and asks you to make the decisions. The result is a structured specification with acceptance criteria, implementation tasks, and a prompt for your coding agent.
+
+**Describe your idea. Clarify the gaps. Export your plan.**
+
+![Requirements Refiner's idea screen with a reading-list example and project complexity options](docs/screenshots/idea.png)
+
+[Get started](#run-locally) · [See the workflow](#workflow) · [Explore the code](#code-organization) · [Run the checks](#validation)
+
+## What you get
+
+- Questions reviewed before you answer them, with required and optional decisions clearly marked.
+- A specification covering scope, requirements, acceptance criteria, edge cases, and implementation tasks.
+- Traceability between requirements, acceptance criteria, and tasks, with checks for broken references and circular dependencies.
+- Visible draft feedback and a record of which suggestions the final revision applied, rejected, or deferred.
+- Markdown download, specification copying, and a separate coding-agent prompt.
+- Recoverable errors that keep your input and answers available for retry.
+
+Built with Next.js, React, TypeScript, Zod, and the OpenAI SDK. The author and reviewer use the same Luna model in separate calls.
+
+## A look inside
+
+The screenshots show the actual application with a reading-list example. The clarification and specification screens use [test fixtures](tests/fixtures.ts), rather than live model responses. No API credentials are needed to reproduce these example outputs in tests; the application itself requires a key for generation.
+
+<details>
+<summary>Clarify the decisions behind your idea</summary>
+
+The review challenges an assumption about persistent storage and adds a question about finished books. You decide what belongs in scope, and unanswered optional questions remain open.
+
+![Clarification screen showing the analysis summary, a required storage question, and an optional question about finished books](docs/screenshots/clarification.png)
+
+</details>
+
+<details>
+<summary>Inspect the review and export your specification</summary>
+
+The result keeps the draft review alongside the final specification. Open decisions stay visible, and you can copy the specification or download it as Markdown.
+
+![Specification screen showing draft review feedback, export actions, and the reading-list specification with an open decision](docs/screenshots/specification.png)
+
+</details>
 
 ## Run locally
 
@@ -16,19 +57,6 @@ All analysis, drafting, review, and revision calls use `gpt-5.6-luna`. Restart t
 The UI and automated tests run without credentials. Generating real analyses and specifications requires an OpenAI API key. No demo responses are substituted when credentials are missing.
 
 If you use `.env` instead of `.env.local`, remove duplicate settings from `.env.local`. Next.js gives `.env.local` higher priority, even when its API key entries are blank.
-
-## API troubleshooting
-
-Errors show the failing stage, configured model, upstream HTTP status, a recognized provider error code, and a request ID. Match that ID to `[refiner:api]` entries in the terminal running `npm run dev`. `[refiner:stage]` entries show when each stage starts, completes, or fails, with elapsed time. Logs exclude keys, request/response bodies, and raw SDK errors.
-
-- `missing_configuration`: the message lists the missing variables. Check `.env.local` overrides and restart the server.
-- `credit_balance_exhausted` or `insufficient_quota`: check the API account's billing, credits, and project budget. This is not a temporary rate limit; retrying alone cannot fix it.
-- `rate_limit_exceeded`: wait, then retry.
-- `model_not_found`: verify the model ID and the API project's access to it.
-- `invalid_json_schema`: the provider rejected the output schema. Use the failing stage to identify the schema.
-- Upstream HTTP 503: the provider is temporarily unavailable or overloaded.
-
-For OpenAI billing, check [API billing](https://platform.openai.com/settings/organization/billing/overview). API usage is billed separately from a ChatGPT subscription.
 
 For a production build, run `npm run build`, then `npm start`. V1 is intended for local use. Its paid API routes have no authentication or application rate limiter; do not expose the server publicly without adding those controls.
 
@@ -91,3 +119,21 @@ Tests cover request/schema validation, reference integrity, deterministic Markdo
 To verify live integration after configuring keys, submit a small idea such as "A local reading list for my books," answer the reviewed questions, and generate a specification. Check Luna's review details and export both the Markdown and agent prompt. A full successful run makes five OpenAI calls using Luna. Live provider access was not verified during initial implementation because API credentials were unavailable.
 
 API implementation reference: [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs). Model reference: [GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna).
+
+## API troubleshooting
+
+<details>
+<summary>Diagnose configuration, provider, and pipeline errors</summary>
+
+Errors show the failing stage, configured model, upstream HTTP status, a recognized provider error code, and a request ID. Match that ID to `[refiner:api]` entries in the terminal running `npm run dev`. `[refiner:stage]` entries show when each stage starts, completes, or fails, with elapsed time. Logs exclude keys, request/response bodies, and raw SDK errors.
+
+- `missing_configuration`: the message lists the missing variables. Check `.env.local` overrides and restart the server.
+- `credit_balance_exhausted` or `insufficient_quota`: check the API account's billing, credits, and project budget. This is not a temporary rate limit; retrying alone cannot fix it.
+- `rate_limit_exceeded`: wait, then retry.
+- `model_not_found`: verify the model ID and the API project's access to it.
+- `invalid_json_schema`: the provider rejected the output schema. Use the failing stage to identify the schema.
+- Upstream HTTP 503: the provider is temporarily unavailable or overloaded.
+
+For OpenAI billing, check [API billing](https://platform.openai.com/settings/organization/billing/overview). API usage is billed separately from a ChatGPT subscription.
+
+</details>
