@@ -34,7 +34,7 @@ it("uses Luna for author and reviewer with only an OpenAI key", async () => {
     await providers.reviewer.generate(request);
     expect(parse).toHaveBeenCalledTimes(2);
     for (const [args] of parse.mock.calls) {
-      expect(args.model).toBe("gpt-5.6-luna");
+      expect(args.model).toBe("gpt-6-luna");
     }
   } finally {
     vi.unstubAllEnvs();

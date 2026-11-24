@@ -380,7 +380,7 @@ describe("bring your own key", () => {
             code: "invalid_api_key",
             message: `Incorrect API key provided: ${VISITOR_KEY}`,
           },
-          "gpt-5.6-luna",
+          "gpt-6-luna",
           "visitor",
         );
       }),

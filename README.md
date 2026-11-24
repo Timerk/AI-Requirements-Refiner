@@ -16,7 +16,7 @@ Requirements Refiner helps developers clarify scope before writing code. It anal
 
 The public deployment opens in **demo mode**. Pick one of three recorded examples (a community-garden shift sign-up, a personal reading list, a payment webhook relay) and walk through the complete flow: analysis, reviewed questions, draft review, final specification, and export. Demo mode makes no model call, costs nothing, and every screen is labelled **Recorded example**.
 
-**Live mode** runs your own idea through `gpt-5.6-luna`, five calls per full run:
+**Live mode** runs your own idea through `gpt-6-luna`, five calls per full run:
 
 - With the hosted key, each visitor gets a few free runs per day (3 by default) under a shared daily cap. When either limit is reached, the app explains why and switches back to the recorded examples.
 - With **your own OpenAI API key**, the hosted quota does not apply and usage is billed to your account. The key is sent only in a request header to this app's server for that request. It is never stored, logged, or returned, and it is never exposed through a `NEXT_PUBLIC_` variable.
@@ -63,7 +63,7 @@ Requires Node.js 22.12 or newer and npm. An OpenAI API key is needed only for li
 3. Optional: set `OPENAI_API_KEY` in `.env.local` for live runs with the hosted key.
 4. Run `npm run dev` and open [localhost:3000](http://localhost:3000).
 
-All analysis, drafting, review, and revision calls use `gpt-5.6-luna`. Restart the server after changing environment variables. Never prefix API keys with `NEXT_PUBLIC_` or commit `.env.local`.
+All analysis, drafting, review, and revision calls use `gpt-6-luna`. Restart the server after changing environment variables. Never prefix API keys with `NEXT_PUBLIC_` or commit `.env.local`.
 
 The UI, the recorded examples, and the automated tests run without credentials. Recorded output is shown only when you choose a recorded example, or after a live request is refused, and it is always labelled. It is never passed off as live output. Locally, the daily quota uses an in-memory counter that resets when the server restarts. Upstash is needed only on Vercel.
 
@@ -173,7 +173,7 @@ Tests cover request/schema validation, reference integrity, deterministic Markdo
 
 To verify live integration after configuring keys, submit a small idea such as "A local reading list for my books," answer the reviewed questions, and generate a specification. Check Luna's review details and export both the Markdown and agent prompt. A full successful run makes five OpenAI calls using Luna. On 2026-11-24, live mode was verified end to end on the production deployment when a full run with `gpt-5.6-luna` (analysis, critique, draft, review, and final revision) passed bot verification and the daily quota check and returned a complete specification.
 
-API implementation reference: [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs). Model reference: [GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna).
+API implementation reference: [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs). Model reference: [GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna).
 
 ## API troubleshooting
 
