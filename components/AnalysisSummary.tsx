@@ -1,20 +1,26 @@
 import type { AnalysisResult } from "@/lib/schemas/contracts";
 
 export function AnalysisSummary({ result }: { result: AnalysisResult }) {
+  const addedCount = result.review.addedQuestions.length;
+  const challengedCount = result.review.challengedAssumptions.length;
+
   return (
     <section className="analysis-summary" aria-label="Analysis summary">
       <div className="eyebrow">Our understanding</div>
       <p className="understood-goal">{result.analysis.understoodGoal}</p>
       <div className="review-stats">
         <span>
-          <strong>{result.review.addedQuestions.length}</strong> questions added
+          <strong>{addedCount}</strong>{" "}
+          {addedCount === 1 ? "question added" : "questions added"}
         </span>
         <span>
           <strong>{result.review.removedQuestionIds.length}</strong> removed
         </span>
         <span>
-          <strong>{result.review.challengedAssumptions.length}</strong>{" "}
-          assumptions challenged
+          <strong>{challengedCount}</strong>{" "}
+          {challengedCount === 1
+            ? "assumption challenged"
+            : "assumptions challenged"}
         </span>
       </div>
       <details>

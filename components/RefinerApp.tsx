@@ -136,6 +136,9 @@ async function post<T>(
   };
 }
 
+const SOURCE_URL = "https://github.com/Timerk/AI-Requirements-Refiner";
+const AUTHOR_URL = "https://github.com/Timerk";
+
 export function RefinerApp({ access }: { access: PublicAccess }) {
   const [stage, setStage] = useState<Stage>("idea");
   const [mode, setMode] = useState<RunMode>("demo");
@@ -334,10 +337,21 @@ export function RefinerApp({ access }: { access: PublicAccess }) {
             requirements<span className="wordmark-light"> / refiner</span>
           </span>
         </Link>
-        <span className="version">
-          <span className="status-dot" />{" "}
-          {recordedRun ? "DEMO · RECORDED EXAMPLES" : "LIVE · LUNA. YOUR CALL."}
-        </span>
+        <div className="header-meta">
+          <span className="version">
+            <span className="status-dot" />{" "}
+            {recordedRun ? "DEMO · RECORDED EXAMPLES" : "LIVE · LUNA. YOUR CALL."}
+          </span>
+          <a
+            className="header-source"
+            href={SOURCE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Source<span className="sr-only"> code on GitHub (opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </div>
       </header>
       <main>
         <StepIndicator current={current} />
@@ -545,6 +559,19 @@ export function RefinerApp({ access }: { access: PublicAccess }) {
       <footer className="site-footer">
         <span>Less guessing. More building.</span>
         <span>No saved history · Export before you leave</span>
+        <nav className="footer-links" aria-label="Project links">
+          <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+            Source on GitHub
+            <span className="sr-only"> (opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer">
+            Built by Timerk
+            <span className="sr-only"> (GitHub profile, opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </nav>
       </footer>
     </div>
   );
