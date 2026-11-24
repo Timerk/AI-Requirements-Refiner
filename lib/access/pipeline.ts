@@ -64,7 +64,13 @@ async function authorizeLive(
   let human: boolean;
   try {
     human = await deps.verifyHuman();
-  } catch {
+  } catch (error) {
+    // BotID's own errors name the missing piece (for example the OIDC token);
+    // they never contain request bodies or API keys.
+    console.error("[refiner:access]", {
+      event: "bot_check_unavailable",
+      reason: error instanceof Error ? error.message : "unknown",
+    });
     throw new AccessError(
       `The automated browser check is unavailable, so live runs are paused. ${DEMO_HINT}`,
       503,
