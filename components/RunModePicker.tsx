@@ -72,7 +72,7 @@ export function RunModePicker({
   const liveDetail = access.demoOnly
     ? "Switched off on this deployment"
     : access.hostedLive
-      ? `${access.perIpLimit} free runs per visitor per day, or use your own key`
+      ? `${access.perIpLimit} free ${access.perIpLimit === 1 ? "run" : "runs"} per visitor per day, or use your own key`
       : "Bring your own OpenAI API key";
   return (
     <section className="run-mode" aria-label="Run mode">

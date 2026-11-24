@@ -111,7 +111,7 @@ async function authorizeLive(
   if (!decision.allowed)
     throw new AccessError(
       decision.scope === "visitor"
-        ? `You have used today's ${config.limits.perIp} free live runs. They reset at 00:00 UTC. ${DEMO_HINT} You can also add your own OpenAI API key to keep going live.`
+        ? `You have used today's ${config.limits.perIp} free live ${config.limits.perIp === 1 ? "run" : "runs"}. The limit resets at 00:00 UTC. ${DEMO_HINT} You can also add your own OpenAI API key to keep going live.`
         : `Today's shared live runs are used up. They reset at 00:00 UTC. ${DEMO_HINT} You can also add your own OpenAI API key to keep going live.`,
       429,
       "live_quota_exceeded",

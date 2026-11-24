@@ -23,7 +23,7 @@ export function ClarificationForm({
       <div className="section-heading">
         <h2>
           {questions.length
-            ? `${questions.length} decisions to clarify`
+            ? `${questions.length} ${questions.length === 1 ? "decision" : "decisions"} to clarify`
             : "Your idea has enough detail"}
         </h2>
         <p>

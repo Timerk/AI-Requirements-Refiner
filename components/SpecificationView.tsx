@@ -33,6 +33,7 @@ export function SpecificationView({
 }) {
   const [notice, setNotice] = useState("");
   const spec = result.finalSpecification;
+  const openDecisionCount = spec.unresolvedQuestions.length;
   const markdown = specificationToMarkdown(spec);
   async function copy(text: string, name: string) {
     try {
@@ -87,12 +88,16 @@ export function SpecificationView({
         </div>
         <h2 className="project-name">{spec.projectName}</h2>
         <p className="spec-goal">{spec.goal}</p>
-        {spec.unresolvedQuestions.length > 0 && (
+        {openDecisionCount > 0 && (
           <div className="open-decisions">
             <strong>
-              {spec.unresolvedQuestions.length} open decisions remain.
+              {openDecisionCount}{" "}
+              {openDecisionCount === 1
+                ? "open decision remains."
+                : "open decisions remain."}
             </strong>{" "}
-            Resolve them before implementing dependent tasks.
+            Resolve {openDecisionCount === 1 ? "it" : "them"} before
+            implementing dependent tasks.
           </div>
         )}
         <TextList title="Scope" items={spec.scope} />

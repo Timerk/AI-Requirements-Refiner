@@ -8,13 +8,13 @@ Requirements Refiner helps developers clarify scope before writing code. It anal
 
 ![Requirements Refiner's idea screen with a reading-list example and project complexity options](docs/screenshots/idea.png)
 
-**Live demo:** _coming soon: `https://<your-project>.vercel.app`_
+**Live demo:** [ai-requirements-refiner.vercel.app](https://ai-requirements-refiner.vercel.app)
 
 [Try it](#try-it) · [Get started](#run-locally) · [See the workflow](#workflow) · [Explore the code](#code-organization) · [Deployment & operations](#deployment--operations) · [Run the checks](#validation)
 
 ## Try it
 
-The public deployment opens in **demo mode**. Pick one of three recorded examples (a personal reading list, a community-garden shift sign-up, a payment webhook relay) and walk through the complete flow: analysis, reviewed questions, draft review, final specification, and export. Demo mode makes no model call, costs nothing, and every screen is labelled **Recorded example**.
+The public deployment opens in **demo mode**. Pick one of three recorded examples (a community-garden shift sign-up, a personal reading list, a payment webhook relay) and walk through the complete flow: analysis, reviewed questions, draft review, final specification, and export. Demo mode makes no model call, costs nothing, and every screen is labelled **Recorded example**.
 
 **Live mode** runs your own idea through `gpt-6-luna`, five calls per full run:
 
@@ -171,7 +171,7 @@ GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs all
 
 Tests cover request/schema validation, reference integrity, deterministic Markdown, real prompt loading, mocked SDK adapters, orchestration order and review forwarding, failure handling, the React workflow including retry and clipboard actions, demo-mode routing, the kill switch, the rate limiter with a mocked store (including Upstash's fail-open timeout), bot-check failures, the 429 fallback, and proof that a visitor's key is never logged or returned. Every recorded example is replayed through the real pipeline validation. A Playwright test completes the full flow in demo mode against a production build with `DEMO_ONLY=true`. No test calls a paid API.
 
-To verify live integration after configuring keys, submit a small idea such as "A local reading list for my books," answer the reviewed questions, and generate a specification. Check Luna's review details and export both the Markdown and agent prompt. A full successful run makes five OpenAI calls using Luna. Live provider access has not yet been verified because API credentials were unavailable during implementation.
+To verify live integration after configuring keys, submit a small idea such as "A local reading list for my books," answer the reviewed questions, and generate a specification. Check Luna's review details and export both the Markdown and agent prompt. A full successful run makes five OpenAI calls using Luna. On 2026-11-24, live mode was verified end to end on the production deployment when a full run with `gpt-5.6-luna` (analysis, critique, draft, review, and final revision) passed bot verification and the daily quota check and returned a complete specification.
 
 API implementation reference: [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs). Model reference: [GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna).
 

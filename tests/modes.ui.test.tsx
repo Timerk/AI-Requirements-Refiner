@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import { RefinerApp } from "@/components/RefinerApp";
 import type { PublicAccess } from "@/lib/access/config";
 import { gardenShiftsExample } from "@/lib/demo/examples/gardenShifts";
@@ -52,9 +58,18 @@ it("starts in demo mode and walks through a recorded example labelled as recorde
     (screen.getByRole("radio", { name: /Recorded example/ }) as HTMLInputElement)
       .checked,
   ).toBe(true);
-  fireEvent.click(
-    screen.getByRole("radio", { name: new RegExp(gardenShiftsExample.title) }),
-  );
+  // Garden shifts is the first example and preselected: no click needed.
+  const firstExample = screen
+    .getByRole("group", { name: "Choose an example" })
+    .querySelector('input[type="radio"]') as HTMLInputElement;
+  expect(firstExample.value).toBe("garden-shifts");
+  expect(
+    (
+      screen.getByRole("radio", {
+        name: new RegExp(gardenShiftsExample.title),
+      }) as HTMLInputElement
+    ).checked,
+  ).toBe(true);
   const description = screen.getByLabelText(
     "What do you want to build?",
   ) as HTMLTextAreaElement;
@@ -111,7 +126,7 @@ it("falls back to recorded examples when the live quota is used up", async () =>
       Response.json(
         {
           error:
-            "You have used today's 3 free live runs. They reset at 00:00 UTC.",
+            "You have used today's 3 free live runs. The limit resets at 00:00 UTC.",
           code: "live_quota_exceeded",
           fallback: "demo",
           retryAfterSeconds: 3600,
@@ -234,4 +249,20 @@ it("disables live mode when the deployment is demo-only", () => {
   expect(live.disabled).toBe(true);
   expect(screen.getByText("Switched off on this deployment")).toBeTruthy();
   expect(screen.queryByLabelText(/Your OpenAI API key/)).toBeNull();
+});
+
+it("links to the source code and the author from the footer", () => {
+  render(<RefinerApp access={access} />);
+  const footer = screen.getByRole("navigation", { name: "Project links" });
+  const source = within(footer).getByRole("link", { name: /Source on GitHub/ });
+  const author = within(footer).getByRole("link", { name: /Built by Timerk/ });
+  expect(source.getAttribute("href")).toBe(
+    "https://github.com/Timerk/AI-Requirements-Refiner",
+  );
+  expect(author.getAttribute("href")).toBe("https://github.com/Timerk");
+  for (const link of [source, author]) {
+    expect(link.getAttribute("target")).toBe("_blank");
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+    expect(link.textContent).toMatch(/opens in a new tab/);
+  }
 });
