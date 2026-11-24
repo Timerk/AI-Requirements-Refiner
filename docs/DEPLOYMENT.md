@@ -35,7 +35,7 @@ The token grants write access to the database. Keep it only in Vercel's environm
 Do this **before** adding the key to Vercel.
 
 1. Create a dedicated **project** (for example "refiner-public-demo") so its usage and limits are separate from your other work.
-2. In that project, create an API key. If your account offers restricted permissions, allow only the Responses API ("Model capabilities") and confirm `gpt-5.6-luna` is available to the project.
+2. In that project, create an API key. If your account offers restricted permissions, allow only the Responses API ("Model capabilities") and confirm `gpt-6-luna` is available to the project.
 3. Set a **monthly budget** for the project, for example **$5**, and an **email alert** at a lower threshold, for example $3. You'll find both in the project's limits settings or in Organization → Billing → Limits.
 4. Check whether your budget **blocks** requests once reached or only **notifies** you. If it only notifies, make prepaid credits the hard cap: buy a small credit balance (for example $5) and turn **auto-recharge off**.
 5. Optional: turn on usage notifications so you see unusual spend early.
@@ -80,7 +80,7 @@ Expected: HTTP 403 with `"code":"bot_detected"`, or 503 with `"code":"verificati
 3. Answer the required questions and generate the specification. Expect a few minutes and five OpenAI calls. The screens should show **Live output**.
 4. In the Upstash data browser, you should see keys under `refiner:live` (hashed visitor IDs, no IP addresses).
 5. In OpenAI → Usage for the project, the calls appear shortly afterwards.
-6. Optional limit check: temporarily set `LIVE_RUNS_PER_IP_PER_DAY=1`, redeploy, and start a second live run. You should see the "You have used today's 1 free live runs" message and land back on the recorded examples. Then restore `3`.
+6. Optional limit check: temporarily set `LIVE_RUNS_PER_IP_PER_DAY=1`, redeploy, and start a second live run. You should see the "You have used today's 1 free live run" message and land back on the recorded examples. Then restore `3`.
 
 If something fails, the error shows a request ID. Match it to `[refiner:api]` lines in Vercel → Logs.
 

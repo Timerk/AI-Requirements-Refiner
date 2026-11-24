@@ -1,5 +1,6 @@
 import type { PublicAccess } from "@/lib/access/config";
 import type { DemoExample } from "@/lib/demo/examples";
+import { LUNA_MODEL } from "@/lib/llm/model";
 
 export type RunMode = "demo" | "live";
 
@@ -71,7 +72,7 @@ export function RunModePicker({
   const liveDetail = access.demoOnly
     ? "Switched off on this deployment"
     : access.hostedLive
-      ? `${access.perIpLimit} free runs per visitor per day, or use your own key`
+      ? `${access.perIpLimit} free ${access.perIpLimit === 1 ? "run" : "runs"} per visitor per day, or use your own key`
       : "Bring your own OpenAI API key";
   return (
     <section className="run-mode" aria-label="Run mode">
@@ -167,7 +168,7 @@ export function SourceNotice({
   ) : (
     <div className="source-notice live" role="note">
       <strong>Live output</strong>
-      <span>Generated for your input by gpt-5.6-luna.</span>
+      <span>Generated for your input by {LUNA_MODEL}.</span>
     </div>
   );
 }

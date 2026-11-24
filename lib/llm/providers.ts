@@ -1,6 +1,7 @@
 import "server-only";
 import { OpenAIProvider } from "./openai";
 import { ProviderError, type Credentials } from "./errors";
+import { LUNA_MODEL } from "./model";
 import type { Providers } from "./types";
 
 /**
@@ -21,7 +22,7 @@ export function createProviders(options?: {
   }
   const luna = new OpenAIProvider(
     apiKey,
-    "gpt-5.6-luna",
+    LUNA_MODEL,
     options?.credentials ?? "server",
   );
   return { author: luna, reviewer: luna };

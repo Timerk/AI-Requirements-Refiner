@@ -5,9 +5,11 @@ import type { DemoExample } from "./types";
 
 export type { DemoExample } from "./types";
 
+// The first example is preselected in the picker: garden shifts shows the
+// review mechanic best and needs no technical background to follow.
 export const demoExamples: readonly DemoExample[] = [
-  readingListExample,
   gardenShiftsExample,
+  readingListExample,
   webhookRelayExample,
 ];
 

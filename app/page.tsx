@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { publicAccess, readAccessConfig } from "@/lib/access/config";
 import { readingListExample as example } from "@/lib/demo/examples/readingList";
+import { AUTHOR_URL, SOURCE_URL } from "@/lib/site";
 
 // Everything quoted on this page comes from the recorded reading-list run,
 // the same data the app serves in demo mode.
@@ -63,9 +64,12 @@ export default async function Home() {
         </Link>
         <a
           className="lp-quiet-link"
-          href="https://github.com/Timerk/AI-Requirements-Refiner"
+          href={SOURCE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          Source on GitHub
+          <span className="lp-link-long">Source on </span>GitHub
+          <span className="sr-only"> (opens in a new tab)</span>
         </a>
       </header>
 
@@ -211,6 +215,22 @@ export default async function Home() {
           </div>
         </section>
       </main>
+      <footer className="site-footer">
+        <span>Less guessing. More building.</span>
+        <nav className="footer-links" aria-label="Project links">
+          <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+            Source on GitHub
+            <span className="sr-only"> (opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer">
+            Built by Timerk
+            <span className="sr-only"> (GitHub profile, opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </nav>
+      </footer>
     </div>
   );
 }

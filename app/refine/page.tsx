@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { RefinerApp } from "@/components/RefinerApp";
 import { publicAccess, readAccessConfig } from "@/lib/access/config";
+
+export const metadata: Metadata = { title: "Refine an idea" };
 
 export default async function Page({
   searchParams,

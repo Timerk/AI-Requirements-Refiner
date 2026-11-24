@@ -16,6 +16,7 @@ import {
 } from "@/components/RunModePicker";
 import type { PublicAccess } from "@/lib/access/config";
 import { demoExamples, findDemoExample } from "@/lib/demo/examples";
+import { AUTHOR_URL, SOURCE_URL } from "@/lib/site";
 import {
   AnalysisResultSchema,
   SpecificationInputSchema,
@@ -340,10 +341,21 @@ export function RefinerApp({
             requirements<span className="wordmark-light"> / refiner</span>
           </span>
         </Link>
-        <span className="version">
-          <span className="status-dot" />{" "}
-          {recordedRun ? "DEMO · RECORDED EXAMPLES" : "LIVE · LUNA. YOUR CALL."}
-        </span>
+        <div className="header-meta">
+          <span className="version">
+            <span className="status-dot" />{" "}
+            {recordedRun ? "DEMO · RECORDED EXAMPLES" : "LIVE · LUNA. YOUR CALL."}
+          </span>
+          <a
+            className="header-source"
+            href={SOURCE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Source<span className="sr-only"> code on GitHub (opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </div>
       </header>
       <main>
         <StepIndicator current={current} />
@@ -551,6 +563,19 @@ export function RefinerApp({
       <footer className="site-footer">
         <span>Less guessing. More building.</span>
         <span>No saved history · Export before you leave</span>
+        <nav className="footer-links" aria-label="Project links">
+          <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+            Source on GitHub
+            <span className="sr-only"> (opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href={AUTHOR_URL} target="_blank" rel="noopener noreferrer">
+            Built by Timerk
+            <span className="sr-only"> (GitHub profile, opens in a new tab)</span>
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </nav>
       </footer>
     </div>
   );
