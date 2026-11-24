@@ -80,7 +80,7 @@ Expected: HTTP 403 with `"code":"bot_detected"`, or 503 with `"code":"verificati
 3. Answer the required questions and generate the specification. Expect a few minutes and five OpenAI calls. The screens should show **Live output**.
 4. In the Upstash data browser, you should see keys under `refiner:live` (hashed visitor IDs, no IP addresses).
 5. In OpenAI → Usage for the project, the calls appear shortly afterwards.
-6. Optional limit check: temporarily set `LIVE_RUNS_PER_IP_PER_DAY=1`, redeploy, and start a second live run. You should see the "You have used today's 1 free live runs" message and land back on the recorded examples. Then restore `3`.
+6. Optional limit check: temporarily set `LIVE_RUNS_PER_IP_PER_DAY=1`, redeploy, and start a second live run. You should see the "You have used today's 1 free live run" message and land back on the recorded examples. Then restore `3`.
 
 If something fails, the error shows a request ID. Match it to `[refiner:api]` lines in Vercel → Logs.
 

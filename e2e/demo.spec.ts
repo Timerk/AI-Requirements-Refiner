@@ -16,6 +16,13 @@ test("completes the full flow with a recorded example and no paid call", async (
   await expect(page.getByRole("radio", { name: /Recorded example/ })).toBeChecked();
   // The deployment runs with DEMO_ONLY=true: live mode is visibly off.
   await expect(page.getByRole("radio", { name: /Live with Luna/ })).toBeDisabled();
+  // The garden example is preselected; it shows the review mechanic best.
+  await expect(
+    page.getByRole("radio", { name: /Community garden shift sign-up/ }),
+  ).toBeChecked();
+  await expect(
+    page.getByRole("link", { name: /Source on GitHub/ }),
+  ).toHaveAttribute("href", "https://github.com/Timerk/AI-Requirements-Refiner");
 
   await page.getByRole("radio", { name: /Payment webhook relay/ }).check();
   await expect(page.getByLabel("What do you want to build?")).toHaveValue(

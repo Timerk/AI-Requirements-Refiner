@@ -1,20 +1,22 @@
 import type { SpecificationResult } from "@/lib/schemas/contracts";
 
 export function ReviewSummary({ result }: { result: SpecificationResult }) {
+  const findingCount = result.review.issues.length;
+
   return (
     <section className="review-summary">
       <div className="eyebrow">Draft review</div>
       <h2>
         {result.review.verdict === "approved"
           ? "Luna approved the draft"
-          : `${result.review.issues.length} review findings considered`}
+          : `${findingCount} review ${findingCount === 1 ? "finding" : "findings"} considered`}
       </h2>
       <p>{result.review.summary}</p>
       <p className="muted">
         Luna produced the final revision below. Its reported changes have not
         been reviewed again by Luna.
       </p>
-      {result.review.issues.length > 0 && (
+      {findingCount > 0 && (
         <details>
           <summary>See feedback and revision decisions</summary>
           <div className="review-issues">
