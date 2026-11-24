@@ -7,6 +7,9 @@ export interface FailureDiagnostics {
   upstreamStatus?: number;
 }
 
+/** Whose API key a provider call uses. Changes guidance, never logs the key. */
+export type Credentials = "server" | "visitor";
+
 export class ProviderError extends Error {
   constructor(
     message: string,
@@ -22,6 +25,7 @@ export function providerFailure(
   provider: string,
   error: unknown,
   model?: string,
+  credentials: Credentials = "server",
 ): ProviderError {
   const metadata = z
     .object({
@@ -82,10 +86,15 @@ export function providerFailure(
       503,
     );
   if (status === 401 || status === 403)
-    return failure(
-      `${provider} rejected the API credentials. Check the server configuration.`,
-      503,
-    );
+    return credentials === "visitor"
+      ? failure(
+          `${provider} rejected the API key you entered. Check the key and its project permissions, or remove it.`,
+          401,
+        )
+      : failure(
+          `${provider} rejected the API credentials. Check the server configuration.`,
+          503,
+        );
   if (code === "model_not_found" || status === 404)
     return failure(
       `${provider} could not find or access the configured model. Check the model ID and your API project's model access.`,

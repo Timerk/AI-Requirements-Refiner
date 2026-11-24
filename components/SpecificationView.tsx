@@ -24,8 +24,10 @@ export function SpecificationView({
   result,
   onBack,
   onReset,
+  recorded = false,
 }: {
   result: SpecificationResult;
+  recorded?: boolean;
   onBack: () => void;
   onReset: () => void;
 }) {
@@ -48,7 +50,7 @@ export function SpecificationView({
     );
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${
+    link.download = `${recorded ? "recorded-example-" : ""}${
       spec.projectName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -80,7 +82,9 @@ export function SpecificationView({
       </p>
       <ReviewSummary result={result} />
       <article className="specification">
-        <div className="eyebrow">Final specification</div>
+        <div className="eyebrow">
+          {recorded ? "Recorded example · Final specification" : "Final specification"}
+        </div>
         <h2 className="project-name">{spec.projectName}</h2>
         <p className="spec-goal">{spec.goal}</p>
         {spec.unresolvedQuestions.length > 0 && (
