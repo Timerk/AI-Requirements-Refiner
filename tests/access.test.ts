@@ -286,6 +286,7 @@ describe("hosted live runs", () => {
   });
 
   it("fails closed when the bot check or the quota store is unavailable", async () => {
+    const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     const verification = await handlePipelineRequest(
       request(live()),
       analyzeRoute,
@@ -300,6 +301,12 @@ describe("hosted live runs", () => {
       code: "verification_unavailable",
       fallback: "demo",
     });
+    // The cause reaches the server log, so a broken BotID setup can be diagnosed.
+    expect(logged).toHaveBeenCalledWith("[refiner:access]", {
+      event: "bot_check_unavailable",
+      reason: "VERCEL_OIDC_TOKEN is not set",
+    });
+    logged.mockRestore();
 
     const broken: QuotaStore = {
       consume: async () => {
