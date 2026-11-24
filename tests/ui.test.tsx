@@ -3,11 +3,12 @@ import { afterEach, expect, it, vi } from "vitest";
 import {
   cleanup,
   fireEvent,
-  render,
+  render as renderUi,
   screen,
   waitFor,
 } from "@testing-library/react";
-import Home from "@/app/page";
+import { RefinerApp } from "@/components/RefinerApp";
+import type { PublicAccess } from "@/lib/access/config";
 import {
   analysis,
   analysisReview,
@@ -27,13 +28,31 @@ const analysisResponse = {
   analysis,
   review: analysisReview,
   questions: analysisReview.finalQuestions,
+  source: "live",
 };
 const specificationResponse = {
   draft: specification,
   review: specificationReview,
   finalSpecification: revision.specification,
   reviewDecisions: revision.reviewDecisions,
+  source: "live",
 };
+const hostedAccess: PublicAccess = {
+  hostedLive: true,
+  visitorKey: true,
+  demoOnly: false,
+  perIpLimit: 3,
+};
+
+// Demo mode is the default; these tests exercise the live workflow.
+function Home() {
+  return <RefinerApp access={hostedAccess} />;
+}
+function render(ui: React.ReactElement) {
+  const view = renderUi(ui);
+  fireEvent.click(screen.getByRole("radio", { name: /Live with Luna/ }));
+  return view;
+}
 
 async function enterIdea() {
   fireEvent.change(screen.getByLabelText("What do you want to build?"), {

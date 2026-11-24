@@ -19,10 +19,15 @@ export function IdeaInput({
   idea,
   onChange,
   onSubmit,
+  recorded = false,
+  blocked = false,
 }: {
   idea: Idea;
   onChange: (idea: Idea) => void;
   onSubmit: () => void;
+  /** Recorded examples have a fixed idea; the fields are read-only. */
+  recorded?: boolean;
+  blocked?: boolean;
 }) {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,7 +37,9 @@ export function IdeaInput({
     <form onSubmit={submit} className="idea-form">
       <div className="field-heading">
         <label htmlFor="description">What do you want to build?</label>
-        <span className="field-note">Start with the rough version</span>
+        <span className="field-note">
+          {recorded ? "Recorded example · read-only" : "Start with the rough version"}
+        </span>
       </div>
       <textarea
         id="description"
@@ -41,6 +48,7 @@ export function IdeaInput({
         required
         minLength={10}
         maxLength={12000}
+        readOnly={recorded}
         value={idea.description}
         onChange={(event) =>
           onChange({ ...idea, description: event.target.value })
@@ -65,6 +73,7 @@ export function IdeaInput({
                 name="complexity"
                 value={type.value}
                 checked={idea.complexity === type.value}
+                disabled={recorded && idea.complexity !== type.value}
                 onChange={() => onChange({ ...idea, complexity: type.value })}
               />
               <span>
@@ -76,17 +85,26 @@ export function IdeaInput({
         </div>
       </fieldset>
       <div className="form-footer">
-        <p>
-          Luna analyzes and reviews the idea.
-          <br />
-          You make the decisions.
-        </p>
+        {recorded ? (
+          <p>
+            Walk through the recorded analysis and review.
+            <br />
+            No model is called and nothing is billed.
+          </p>
+        ) : (
+          <p>
+            Luna analyzes and reviews the idea.
+            <br />
+            You make the decisions.
+          </p>
+        )}
         <button
           className="primary"
           type="submit"
-          disabled={idea.description.trim().length < 10}
+          disabled={blocked || idea.description.trim().length < 10}
         >
-          Analyze requirements <span aria-hidden="true">↗</span>
+          {recorded ? "Walk through example" : "Analyze requirements"}{" "}
+          <span aria-hidden="true">↗</span>
         </button>
       </div>
     </form>

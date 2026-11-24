@@ -2,7 +2,7 @@ import "server-only";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import type { StructuredGenerationRequest, StructuredLLM } from "./types";
-import { ProviderError, providerFailure } from "./errors";
+import { ProviderError, providerFailure, type Credentials } from "./errors";
 
 export class OpenAIProvider implements StructuredLLM {
   private readonly client: OpenAI;
@@ -10,6 +10,7 @@ export class OpenAIProvider implements StructuredLLM {
   constructor(
     apiKey: string,
     private readonly model: string,
+    private readonly credentials: Credentials = "server",
   ) {
     this.client = new OpenAI({ apiKey, timeout: 90000, maxRetries: 0 });
   }
@@ -39,7 +40,7 @@ export class OpenAIProvider implements StructuredLLM {
         );
       return parsed.data;
     } catch (error) {
-      throw providerFailure("OpenAI", error, this.model);
+      throw providerFailure("OpenAI", error, this.model, this.credentials);
     }
   }
 }

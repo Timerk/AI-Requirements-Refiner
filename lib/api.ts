@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AccessError } from "./access/errors";
 import { ProviderError } from "./llm/errors";
 import { PipelineError } from "./orchestration/stage";
 
@@ -46,7 +47,7 @@ async function readJson(request: Request): Promise<unknown> {
 export async function handleRequest<T>(
   request: Request,
   schema: z.ZodType<T>,
-  run: (input: T) => Promise<unknown>,
+  run: (input: T, body: unknown) => Promise<unknown>,
 ) {
   const requestId = crypto.randomUUID();
   const started = performance.now();
@@ -57,8 +58,9 @@ export async function handleRequest<T>(
     path: new URL(request.url).pathname,
   });
   try {
-    const input = schema.parse(await readJson(request));
-    const result = await run(input);
+    const body = await readJson(request);
+    const input = schema.parse(body);
+    const result = await run(input, body);
     console.info("[refiner:api]", {
       requestId,
       event: "completed",
@@ -75,11 +77,31 @@ export async function handleRequest<T>(
         ? error.diagnostics
         : {
             code:
-              error instanceof z.ZodError || error instanceof InputError
-                ? "invalid_request"
-                : "internal_error",
+              error instanceof AccessError
+                ? error.code
+                : error instanceof z.ZodError || error instanceof InputError
+                  ? "invalid_request"
+                  : "internal_error",
           }),
     });
+    if (error instanceof AccessError) {
+      const { fallback, retryAfterSeconds } = error.options;
+      return Response.json(
+        {
+          error: error.message,
+          code: error.code,
+          requestId,
+          ...(fallback ? { fallback } : {}),
+          ...(retryAfterSeconds ? { retryAfterSeconds } : {}),
+        },
+        {
+          status: error.status,
+          headers: retryAfterSeconds
+            ? { ...headers, "Retry-After": String(retryAfterSeconds) }
+            : headers,
+        },
+      );
+    }
     if (error instanceof z.ZodError) {
       return Response.json(
         {
