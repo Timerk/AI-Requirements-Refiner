@@ -136,9 +136,15 @@ async function post<T>(
   };
 }
 
-export function RefinerApp({ access }: { access: PublicAccess }) {
+export function RefinerApp({
+  access,
+  initialMode = "demo",
+}: {
+  access: PublicAccess;
+  initialMode?: RunMode;
+}) {
   const [stage, setStage] = useState<Stage>("idea");
-  const [mode, setMode] = useState<RunMode>("demo");
+  const [mode, setMode] = useState<RunMode>(initialMode);
   const [exampleId, setExampleId] = useState(demoExamples[0].id);
   const [liveIdea, setLiveIdea] = useState<Idea>({
     description: "",

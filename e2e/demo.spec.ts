@@ -1,5 +1,20 @@
 import { expect, test } from "@playwright/test";
 
+test("the landing page opens the refiner with recorded examples", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      name: "Turn a rough idea into a specification you can build.",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("No, keep books only for this session.")).toBeVisible();
+  await page.getByRole("link", { name: "Try a recorded example" }).click();
+  await expect(page).toHaveURL(/\/refine$/);
+  await expect(page.getByRole("radio", { name: /Recorded example/ })).toBeChecked();
+});
+
 test("completes the full flow with a recorded example and no paid call", async ({
   page,
 }) => {
@@ -12,7 +27,7 @@ test("completes the full flow with a recorded example and no paid call", async (
       });
   });
 
-  await page.goto("/");
+  await page.goto("/refine");
   await expect(page.getByRole("radio", { name: /Recorded example/ })).toBeChecked();
   // The deployment runs with DEMO_ONLY=true: live mode is visibly off.
   await expect(page.getByRole("radio", { name: /Live with Luna/ })).toBeDisabled();

@@ -61,7 +61,7 @@ Requires Node.js 22.12 or newer and npm. An OpenAI API key is needed only for li
 1. Run `npm ci`.
 2. Copy `.env.example` to `.env.local`.
 3. Optional: set `OPENAI_API_KEY` in `.env.local` for live runs with the hosted key.
-4. Run `npm run dev` and open [localhost:3000](http://localhost:3000).
+4. Run `npm run dev` and open [localhost:3000](http://localhost:3000). The landing page links to the app at `/refine`.
 
 All analysis, drafting, review, and revision calls use `gpt-5.6-luna`. Restart the server after changing environment variables. Never prefix API keys with `NEXT_PUBLIC_` or commit `.env.local`.
 
