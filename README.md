@@ -14,7 +14,7 @@ Requirements Refiner helps developers clarify scope before writing code. It anal
 
 ## Try it
 
-The public deployment opens in **demo mode**. Pick one of three recorded examples (a community-garden shift sign-up, a personal reading list, a payment webhook relay) and walk through the complete flow: analysis, reviewed questions, draft review, final specification, and export. Demo mode makes no model call, costs nothing, and every screen is labelled **Recorded example**.
+The public deployment opens on a short landing page that links to the app at [`/refine`](https://ai-requirements-refiner.vercel.app/refine). The app starts in **demo mode**. Pick one of three recorded examples (a community-garden shift sign-up, a personal reading list, a payment webhook relay) and walk through the complete flow: analysis, reviewed questions, draft review, final specification, and export. Demo mode makes no model call, costs nothing, and every screen is labelled **Recorded example**.
 
 **Live mode** runs your own idea through `gpt-6-luna`, five calls per full run:
 
@@ -61,7 +61,7 @@ Requires Node.js 22.12 or newer and npm. An OpenAI API key is needed only for li
 1. Run `npm ci`.
 2. Copy `.env.example` to `.env.local`.
 3. Optional: set `OPENAI_API_KEY` in `.env.local` for live runs with the hosted key.
-4. Run `npm run dev` and open [localhost:3000](http://localhost:3000).
+4. Run `npm run dev` and open [localhost:3000](http://localhost:3000). The landing page links to the app at `/refine`.
 
 All analysis, drafting, review, and revision calls use `gpt-6-luna`. Restart the server after changing environment variables. Never prefix API keys with `NEXT_PUBLIC_` or commit `.env.local`.
 
@@ -92,6 +92,7 @@ The finalization prompt ranks explicit user statements and clarification answers
 
 ## Code organization
 
+- `app/page.tsx` is the landing page, built from the recorded reading-list example. `app/refine/page.tsx` hosts the app (`?mode=live` preselects a live run where allowed).
 - `app/api/analyze/route.ts` and `app/api/specification/route.ts` validate requests and invoke the pipelines through `lib/access`.
 - `lib/access` decides how each request runs: recorded example, the kill switch, Vercel BotID, the visitor's own key, or the hosted key under the daily quota (`QuotaStore` with Upstash and in-memory implementations).
 - `lib/demo` holds the recorded examples. Tests replay each one through the real orchestration, so recordings pass the same validation as live output.

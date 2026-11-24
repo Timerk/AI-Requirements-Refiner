@@ -16,6 +16,7 @@ import {
 } from "@/components/RunModePicker";
 import type { PublicAccess } from "@/lib/access/config";
 import { demoExamples, findDemoExample } from "@/lib/demo/examples";
+import { AUTHOR_URL, SOURCE_URL } from "@/lib/site";
 import {
   AnalysisResultSchema,
   SpecificationInputSchema,
@@ -136,12 +137,15 @@ async function post<T>(
   };
 }
 
-const SOURCE_URL = "https://github.com/Timerk/AI-Requirements-Refiner";
-const AUTHOR_URL = "https://github.com/Timerk";
-
-export function RefinerApp({ access }: { access: PublicAccess }) {
+export function RefinerApp({
+  access,
+  initialMode = "demo",
+}: {
+  access: PublicAccess;
+  initialMode?: RunMode;
+}) {
   const [stage, setStage] = useState<Stage>("idea");
-  const [mode, setMode] = useState<RunMode>("demo");
+  const [mode, setMode] = useState<RunMode>(initialMode);
   const [exampleId, setExampleId] = useState(demoExamples[0].id);
   const [liveIdea, setLiveIdea] = useState<Idea>({
     description: "",
